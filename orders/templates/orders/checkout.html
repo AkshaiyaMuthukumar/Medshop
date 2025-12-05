@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.checkout-card {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.47);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.checkout-card h2 {
+    color: #05c088;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+}
+.checkout-card .form-label {
+    font-weight: 600;
+    color: #333;
+}
+.checkout-card .btn-success {
+    background-color: #05c088;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.checkout-card .btn-success:hover {
+    background-color: #039f6c;
+    transform: translateY(-2px);
+}
+</style>
+
+<div class="checkout-card">
+    <h2>Checkout</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="full_name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea name="address" rows="3" class="form-control" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Payment Method</label>
+            <select name="payment" class="form-select" required>
+                <option value="COD">Cash on Delivery</option>
+                <option value="UPI">UPI</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Place Order</button>
+    </form>
+</div>
+
+{% endblock %}

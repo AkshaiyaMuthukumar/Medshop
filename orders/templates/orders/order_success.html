@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.success-card {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #eafaf1;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.success-card h2 {
+    color: #05c088;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.success-card p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 25px;
+}
+.success-card .btn {
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.success-card .btn-primary:hover {
+    background-color: #039f6c;
+}
+.success-card .btn-outline-success:hover {
+    background-color: #05c088;
+    color: #fff;
+    border-color: #05c088;
+}
+</style>
+
+<div class="success-card">
+    <h2>✅ Order Placed Successfully!</h2>
+    <p>Thank you for your purchase. Your order ID is <strong>#{{ order.id }}</strong>.</p>
+
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'medicines:home' %}" class="btn btn-primary">Continue Shopping</a>
+        <a href="{% url 'orders:cart' %}" class="btn btn-outline-success">View Cart</a>
+    </div>
+</div>
+
+{% endblock %}

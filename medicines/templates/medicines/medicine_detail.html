@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.medicine-detail {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.medicine-detail img {
+    flex: 1 1 250px;
+    max-width: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.medicine-info {
+    flex: 2 1 400px;
+}
+
+.medicine-info h2 {
+    color: #05c088;
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.medicine-info p {
+    font-size: 16px;
+    margin: 8px 0;
+    line-height: 1.5;
+    color: #333;
+}
+
+.medicine-info p strong {
+    color: #05c088;
+}
+
+/* Buttons container */
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+/* Add to Cart button */
+.add-cart-btn {
+    background: #05c088;
+}
+
+.add-cart-btn:hover {
+    background: #039f6c;
+    transform: translateY(-2px);
+    color:white;
+}
+
+/* Disabled button */
+.added-btn {
+    background: #777 !important;
+    cursor: not-allowed;
+}
+
+/* Back button */
+.back-btn {
+    background: #777;
+}
+
+.back-btn:hover {
+    background: #474747ff;
+    transform: translateY(-2px);
+    color:white;
+}
+
+/* Login button */
+.login-btn {
+    border: 2px solid #05c088;
+    background: transparent;
+    color: #05c088;
+    cursor: not-allowed;
+}
+
+/* Toast popup */
+#toast {
+    display:none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #05c088;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    font-weight: 600;
+}
+</style>
+
+<div class="medicine-detail">
+    <img src="{{ medicine.image.url }}" alt="{{ medicine.name }}">
+    <div class="medicine-info">
+        <h2>{{ medicine.name }}</h2>
+        <p><strong>Category:</strong> {{ medicine.get_category_display }}</p>
+        <p><strong>Price:</strong> ₹{{ medicine.price }}</p>
+        <p><strong>Description:</strong> {{ medicine.description }}</p>
+        <p><strong>Components:</strong> {{ medicine.components }}</p>
+        <p><strong>Side Effects:</strong> {{ medicine.side_effects }}</p>
+
+        {% if user.is_authenticated %}
+            <div class="button-group">
+                <a class="btn add-cart-btn" href="javascript:void(0);" id="add-to-cart-btn" data-id="{{ medicine.id }}">Add to Cart</a>
+                <a class="btn back-btn" href="{% url 'medicines:all_medicines' %}">Back to Shop</a>
+            </div>
+        {% else %}
+            <div class="button-group">
+                <button class="btn login-btn"><em>Login to add to cart</em></button>
+                <a class="btn back-btn" href="{% url 'medicines:all_medicines' %}">Back to Shop</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Toast message -->
+<div id="toast"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const addBtn = document.getElementById('add-to-cart-btn');
+    if(addBtn){
+        addBtn.addEventListener('click', function() {
+            const medicineId = this.getAttribute('data-id');
+            const button = this;
+
+            fetch(`/orders/add-ajax/${medicineId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    // Change button to "Added" and disable
+                    button.innerText = "Added";
+                    button.classList.add('added-btn');
+                    button.disabled = true;
+
+                    // Show toast
+                    const toast = document.getElementById('toast');
+                    toast.innerText = data.medicine_name + " added to cart!";
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+
+                    // Update cart count in navbar
+                    const cartCount = document.getElementById('cart-count');
+                    if(cartCount){
+                        cartCount.innerText = data.total_items;
+                    }
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    }
+});
+</script>
+
+{% endblock %}

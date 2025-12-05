@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="about-section container my-5">
+  <div class="row align-items-center">
+    <!-- Left: Text -->
+    <div class="col-md-6 about-text">
+      <h2 class="about-title">About Us</h2>
+      <p>
+        Welcome to <strong>MedShop</strong>, your trusted online medicine store. 
+        We are dedicated to delivering high-quality medicines right to your doorstep 
+        with ease and reliability. At MedShop, we believe in making healthcare 
+        accessible and affordable for everyone.
+      </p>
+      <p>
+        With a focus on <strong>convenience, safety, and trust</strong>, MedShop is committed to 
+        providing you with genuine medicines from top pharmaceutical brands. 
+        Whether you’re managing chronic conditions or simply stocking up on daily 
+        health essentials, we are here to support your journey to better health.
+      </p>
+      <p>
+        Thank you for choosing MedShop — because <strong>your health is our priority</strong>.
+      </p>
+    </div>
+
+    <!-- Right: Image -->
+    <div class="col-md-6 text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png" 
+           alt="About MedShop" 
+           class="about-img img-fluid rounded shadow">
+    </div>
+  </div>
+</div>
+
+<!-- Mission / Vision Section -->
+<div class="container my-5 mission-section">
+  <h3 class="text-center section-title">Our Mission & Vision</h3>
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div class="mission-card shadow-lg">
+        <i class="bi bi-heart-pulse fs-1 text-success"></i>
+        <h5 class="mt-3">Our Mission</h5>
+        <p>To provide affordable and genuine healthcare products, making wellness accessible to everyone.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="mission-card shadow-lg">
+        <i class="bi bi-lightbulb fs-1 text-warning"></i>
+        <h5 class="mt-3">Our Vision</h5>
+        <p>To become the most trusted online pharmacy that delivers care with compassion and innovation.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="mission-card shadow-lg">
+        <i class="bi bi-people fs-1 text-primary"></i>
+        <h5 class="mt-3">Our Values</h5>
+        <p>Integrity, trust, and customer satisfaction are the core values that guide everything we do.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+/* About Section */
+.about-section {
+  padding: 50px 20px;
+}
+.about-title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #009970;
+}
+.about-text p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #444;
+}
+.about-img {
+  max-width: 350px;
+  transition: transform 0.3s ease-in-out;
+}
+.about-img:hover {
+  transform: scale(1.05);
+}
+
+/* Mission Section */
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #333;
+}
+.mission-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+.mission-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.mission-card h5 {
+  font-weight: 600;
+  margin-top: 15px;
+  color: #009970;
+}
+.mission-card p {
+  color: #555;
+  font-size: 15px;
+  margin-top: 10px;
+}
+</style>
+{% endblock %}

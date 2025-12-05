@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MedShop</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome (for capsule logo) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <style>
+        /* Fixed Navbar styling */
+        .navbar {
+            background-color: #05c088 !important;
+            color: #fff !important;
+        }
+
+        .navbar .nav-link,
+        .navbar .navbar-brand {
+            color: #fff !important;
+        }
+
+        .navbar .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+
+        .navbar .btn-light {
+            color: #000 !important;
+        }
+
+        /* Push body content below fixed navbar */
+        body {
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            background-color: #ffffff;
+        }
+        .dropdown-item:hover {
+            background-color: #05c088;
+            color: #fff !important;
+        }
+
+        /* Cart icon */
+        .btn-cart {
+            position: relative;
+            margin-left: 10px;
+        }
+        .btn-cart .badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #596d66ff;
+            color: white;
+            padding: 1px 0;
+            
+            margin-top: 80px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container">
+            <!-- Capsule logo + MedShop -->
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'medicines:home' %}">
+                <i class="fa-solid fa-capsules me-2"></i> MedShop
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'medicines:home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'medicines:all_medicines' %}">All Medicines</a></li>
+
+                    <!-- Categories Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=pain">Pain Relief</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=cold">Cold & Flu</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=vitamins">Vitamins & Supplements</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=diabetes">Diabetes</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=cardio">Cardiology</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=skin">Skin Care</a></li>
+                            <li><a class="dropdown-item" href="{% url 'medicines:all_medicines' %}?category=antibiotics">Antibiotics</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{% url 'medicines:about' %}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'medicines:contact' %}">Contact</a></li>
+
+                    <!-- USER & AUTH SECTION -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarProfile" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfile">
+                                <li>
+                                    <form method="post" action="{% url 'users:logout' %}">
+                                        {% csrf_token %}
+                                        <button class="dropdown-item" type="submit">Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-light" href="{% url 'users:register' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+
+                    <!-- CART ICON -->
+                    <li class="nav-item ms-2 btn-cart">
+                        <a href="{% url 'orders:cart' %}" class="btn btn-light position-relative">
+                            <i class="bi bi-cart3"></i>
+                            <span id="cart-count" class="badge bg-danger rounded-pill">
+                                {{ cart_count|default:"0" }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <div class="container mt-4 flex-grow-1">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-1">&copy; 2025 MedShop. All Rights Reserved.</p>
+            <p>
+                <a href="{% url 'medicines:about' %}">About Us</a> | 
+                <a href="{% url 'medicines:contact' %}">Contact</a> | 
+                <a href="#">Privacy Policy</a>
+            </p>
+            <p>
+                <a href="#"><i class="bi bi-facebook me-2"></i></a>
+                <a href="#"><i class="bi bi-twitter me-2"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

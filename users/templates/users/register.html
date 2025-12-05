@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="signup-card card shadow-lg p-4 mt-5 border-0">
+            <h2 class="text-center mb-4 signup-title">Create Account</h2>
+            
+            <form method="POST" class="signup-form">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <!-- Email -->
+                <div class="mb-3">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-3">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+
+                <button type="submit" class="btn btn-signup w-100">Sign Up</button>
+            </form>
+
+            <div class="mt-3 text-center signup-footer">
+                Already registered? <a href="{% url 'users:login' %}">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stylish CSS -->
+<style>
+/* Card Styling */
+.signup-card {
+    border-radius: 20px;
+    background: #fff;
+    padding: 35px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.signup-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Title */
+.signup-title {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #006d5b;
+}
+
+/* Input Fields */
+.signup-form input {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+.signup-form input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+    outline: none;
+}
+
+/* Signup Button */
+.btn-signup {
+    background: linear-gradient(90deg, #006d5b, #28a745);
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 12px;
+    transition: all 0.3s ease;
+    color: #fff;
+    font-size: 1rem;
+}
+.btn-signup:hover {
+    background: linear-gradient(90deg, #28a745, #006d5b);
+    transform: scale(1.03);
+}
+
+/* Footer Text */
+.signup-footer {
+    font-size: 0.95rem;
+    color: #555;
+}
+.signup-footer a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #009970;
+    transition: color 0.3s ease;
+}
+.signup-footer a:hover {
+    color: #28a745;
+}
+</style>
+{% endblock %}

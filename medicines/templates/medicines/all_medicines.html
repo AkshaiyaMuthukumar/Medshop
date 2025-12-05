@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="mt-4">
+    <div class="all-medicines-header">
+        <h2 class="mb-3">All Medicines</h2>
+        
+        {% if request.GET.category %}
+            <h4>Category: {{ request.GET.category|title }}</h4>
+        {% endif %}
+    </div>
+
+    {% if medicines %}
+        <div class="row">
+            {% for medicine in medicines %}
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="medicine-card h-100 border rounded p-2 text-center shadow-sm">
+                        {% if medicine.image %}
+                            <img src="{{ medicine.image.url }}" alt="{{ medicine.name }}" class="img-fluid rounded mb-2">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.png' %}" alt="No image" class="img-fluid rounded mb-2">
+                        {% endif %}
+                        <h6 class="mt-2">{{ medicine.name }}</h6>
+                        <p class="price">₹ {{ medicine.price }}</p>
+                        <div class="d-flex justify-content-center gap-2 mt-2">
+                            <a href="{% url 'medicines:medicine_detail' medicine.id %}" class="btn btn-primary btn-sm">View Details</a>
+                            {% if user.is_authenticated %}
+                                <button class="btn btn-success btn-sm add-cart-btn" data-id="{{ medicine.id }}">Add to Cart</button>
+                            {% else %}
+                                <a class="btn btn-secondary btn-sm" href="{% url 'users:login' %}">Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if medicines.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ medicines.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                {% endif %}
+
+                {% for num in medicines.paginator.page_range %}
+                    {% if medicines.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if medicines.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ medicines.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    {% else %}
+        <p>No medicines available.</p>
+    {% endif %}
+</section>
+
+<!-- Toast -->
+<div id="toast" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #05c088;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 9999;
+"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const buttons = document.querySelectorAll('.add-cart-btn');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function(){
+            const medicineId = this.getAttribute('data-id');
+            const button = this;
+
+            fetch(`/orders/add-ajax/${medicineId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success){
+                    // Change button to "Added" and disable
+                    button.innerText = "Added";
+                    button.disabled = true;
+
+                    // Show toast
+                    const toast = document.getElementById('toast');
+                    toast.innerText = data.medicine_name + " added to cart!";
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+
+                    // Update navbar cart count
+                    const cartCount = document.getElementById('cart-count');
+                    if(cartCount) cartCount.innerText = data.total_items;
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    });
+});
+</script>
+
+<style>
+/* Section Headings */
+.all-medicines-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #05c088;
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* Underline effect with gradient */
+.all-medicines-header h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, #05c088, #039f6c);
+    border-radius: 2px;
+    margin-top: 5px;
+}
+
+/* Category heading */
+.all-medicines-header h4 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+/* Optional: small animation for hover effect */
+.all-medicines-header h2:hover::after {
+    width: 100px;
+    transition: width 0.3s ease;
+}
+</style>
+
+{% endblock %}

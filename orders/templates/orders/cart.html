@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.cart-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+    font-family: 'Arial', sans-serif;
+}
+.cart-container h1 {
+    text-align: center;
+    color: #05c088;
+    margin-bottom: 30px;
+}
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.cart-table th, .cart-table td {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.cart-table th {
+    background-color: #05c088;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.cart-table tr:hover {
+    background-color: #f1f1f1;
+}
+.qty-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+.qty-btn {
+    padding: 6px 12px;
+    border: none;
+    background: #05c088;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.qty-btn:hover {
+    background: #039f6c;
+}
+.remove-btn {
+    background-color: #117465ff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.remove-btn:hover {
+    background-color: #08735aff;
+}
+.cart-total {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.empty-cart {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #777;
+}
+.cart-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.cart-buttons a, .cart-buttons button {
+    background-color: #05c088;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+.cart-buttons a:hover, .cart-buttons button:hover {
+    background-color: #049f6c;
+    transform: translateY(-2px);
+}
+
+/* Login message styling */
+.login-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #d9534f; /* red for alert */
+    font-weight: 600;
+    margin-top: 50px;
+}
+.login-message a {
+    color: #05c088;
+    text-decoration: none;
+    font-weight: 700;
+}
+.login-message a:hover {
+    color: #039f6c;
+}
+</style>
+
+<div class="cart-container">
+    <h1>Your Cart</h1>
+
+    {% if user.is_authenticated %}
+        {% if items %}
+        <table class="cart-table">
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.medicine.name }}</td>
+                <td>
+                    <div class="qty-controls">
+                        <form method="POST" action="{% url 'orders:update_quantity' item.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="decrease">
+                            <button type="submit" class="qty-btn">-</button>
+                        </form>
+                        <span>{{ item.quantity }}</span>
+                        <form method="POST" action="{% url 'orders:update_quantity' item.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="increase">
+                            <button type="submit" class="qty-btn">+</button>
+                        </form>
+                    </div>
+                </td>
+                <td>₹{{ item.medicine.price|floatformat:2 }}</td>
+                <td>
+                    <form method="POST" action="{% url 'orders:remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p class="cart-total">
+            <strong>Total: </strong>₹{{ total|floatformat:2 }}
+        </p>
+
+        <div class="cart-buttons">
+            <a href="{% url 'medicines:all_medicines' %}">Continue Shopping</a>
+            <a href="{% url 'orders:checkout' %}">Proceed to Checkout</a>
+        </div>
+        {% else %}
+        <p class="empty-cart">Your cart is empty.</p>
+        <a href="{% url 'medicines:home' %}" class="cart-buttons">Go to Shop</a>
+        {% endif %}
+    {% else %}
+        <div class="login-message">
+            ⚠️ Please <a href="{% url 'users:login' %}">login</a> first to view your cart.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

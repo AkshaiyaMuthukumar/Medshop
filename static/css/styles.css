@@ -1,0 +1,175 @@
+/* ===== GENERAL ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffffef;
+    color: #333;
+    margin: 0;
+    
+    padding-top: 70px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* ===== NAVBAR ===== */
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: rgba(5,192,136,0.85) !important;  /* Updated theme color */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff !important;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    color: #fff !important;
+    margin-right: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffd700 !important;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border-radius: 8px;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(5,192,136,0.9) !important;
+    color: #fff !important;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border-radius: 8px;
+}
+
+.dropdown-item:hover {
+    background-color: #29b997;
+    color: #fff !important;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== FOOTER (if needed later) ===== */
+footer {
+    background-color: #2980b9;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+}
+
+/* ===== MAIN BANNER ===== */
+.main-banner {
+    background: linear-gradient(90deg, rgba(232,247,233,1), rgba(204,234,212,1));
+    padding: 40px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #0a0a0a;
+}
+
+.main-banner h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-dark);
+}
+
+.main-banner p {
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+}
+
+/* ===== CAROUSEL ===== */
+.carousel-inner img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 50%;
+}
+
+/* ===== MEDICINE CARDS ===== */
+.medicine-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.medicine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.medicine-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.medicine-card h6 {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.medicine-card p.price {
+    color: #27ae60;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ===== BUTTONS ===== */
+.btn-sm {
+    font-size: 0.85rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+    .main-banner {
+        padding: 20px;
+    }
+
+    .carousel-inner img {
+        height: 250px;
+    }
+
+    .medicine-card {
+        margin-bottom: 20px;
+    }
+}
+
